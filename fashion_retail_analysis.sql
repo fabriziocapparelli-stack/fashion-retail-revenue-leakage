@@ -584,7 +584,8 @@ SELECT
   COUNT(DISTINCT sale_date)                                        AS days,
   ROUND((SUM(net_usd) - SUM(cost_usd)) / 1000000, 1)               AS gross_profit,
   ROUND((SUM(net_usd) - SUM(cost_usd)) / COUNT(DISTINCT sale_date) / 1000, 0) AS profit_per_day_k,
-  ROUND(SUM(quantity) / COUNT(DISTINCT sale_date))                 AS units_per_day   -- added later
+  ROUND(SUM(quantity) / COUNT(DISTINCT sale_date))                 AS units_per_day,  -- added later
+  ROUND(100 * SAFE_DIVIDE(SUM(net_usd) - SUM(cost_usd), SUM(net_usd)), 1) AS margin_pct  -- added later
 FROM fashion_retail.v_sales_promo
 WHERE transaction_type = 'Sale'
 GROUP BY campaign_name
@@ -615,6 +616,15 @@ ORDER BY profit_per_day_k DESC;
 --        ~8,300 units/day (-57%) to match current profit.
 --     -> New Year sale's low volume supports the volume explanation
 --        (post-holiday fatigue or low leftover stock).
+--   * Margin per campaign (added later): Holiday 35.6% | normal 65.8% |
+--     Autumn 60.2% | Mid-Spring 57.0% | Early Spring 50.9% | Fall 42.1% |
+--     Black Friday 19.5% | New Year 23.8%.
+--     -> Black Friday measured ~20% (earlier ~15% estimate used the
+--        business-wide 34% cost; store-wide items cost ~32% of list).
+--     -> Every campaign matches its expected margin EXCEPT New Year
+--        (40% off should leave ~43%; measured 23.8%). Revises the earlier
+--        "thinner margins ruled out" conclusion for the New Year sale.
+--        Likely linked to the Coats & Blazers anomaly in query 12.
 --   * Store-wide rows (Holiday, Black Friday) cover the whole store, so
 --     they compare fairly to a normal day. Targeted rows cover only a few
 --     sub-categories -> NOT comparable to a whole-store day (see next step).
@@ -697,3 +707,64 @@ SELECT
   COUNT(*)                         AS row_count,
   ROUND(SUM(net_usd) / 1000000, 1) AS net_revenue_m
 FROM fashion_retail.dash_daily;
+
+
+-- ---------------------------------------------------------------------
+-- 21. CHECK — why is the New Year Winter Sale margin so low?
+-- ---------------------------------------------------------------------
+-- discount_pct well above 40 -> deeper discounts than advertised.
+-- discount_pct ~40 but cost_pct_of_list well above ~34 -> higher-cost
+-- items selling during the sale.
+SELECT
+  ROUND(AVG(discount_rate), 3)                                   AS avg_line_rate,
+  ROUND(100 * SAFE_DIVIDE(SUM(discount_usd), SUM(gross_usd)), 1) AS discount_pct,
+  ROUND(100 * SAFE_DIVIDE(SUM(cost_usd), SUM(gross_usd)), 1)     AS cost_pct_of_list
+FROM fashion_retail.v_sales_promo
+WHERE transaction_type = 'Sale'
+  AND campaign_name LIKE '%New Year%';
+
+-- Result: avg_line_rate 0.40 | discount_pct 40.0 | cost_pct_of_list 45.7
+-- Finding: discount is as advertised; the items sold during the New Year
+-- sale cost 45.7% of list (vs ~34% normally). (60 - 45.7) / 60 = 23.8%,
+-- exactly the measured margin. New Year sale is weak for two reasons:
+-- lowest volume of any campaign AND thin margin.
+-- Open question: product mix vs lower January list prices (query 22).
+
+
+-- ---------------------------------------------------------------------
+-- 22. CHECK (optional) — same products: New Year price vs normal price
+-- ---------------------------------------------------------------------
+-- USD list price per unit = gross_usd / quantity. Compares the same
+-- products, so mix can't affect it.
+-- ratio ~1.0 -> mix explains the high cost share
+-- ratio well below 1.0 -> lower list prices during the sale
+WITH prices AS (
+  SELECT
+    product_id,
+    SAFE_DIVIDE(SUM(IF(campaign_name LIKE '%New Year%', gross_usd, 0)),
+                SUM(IF(campaign_name LIKE '%New Year%', quantity, 0)))   AS ny_price,
+    SAFE_DIVIDE(SUM(IF(campaign_type = 'No campaign', gross_usd, 0)),
+                SUM(IF(campaign_type = 'No campaign', quantity, 0)))     AS normal_price
+  FROM fashion_retail.v_sales_promo
+  WHERE transaction_type = 'Sale'
+  GROUP BY product_id
+)
+SELECT
+  COUNT(*)                                  AS products_compared,
+  ROUND(AVG(ny_price / normal_price), 3)    AS avg_price_ratio
+FROM prices
+WHERE ny_price IS NOT NULL AND normal_price IS NOT NULL;
+
+-- Result: products_compared 2,070 | avg_price_ratio 0.836
+-- Findings:
+--   * Same products carry a ~16% LOWER list price during the New Year
+--     sale -> hidden markdown before the advertised 40% is applied.
+--   * Effective discount vs normal price: 0.836 x 0.60 ~= 0.50 -> ~50% off,
+--     not 40%.
+--   * Price cut alone lifts cost share from ~34% to ~41% of list
+--     (34 / 0.836); measured 45.7% -> remainder likely product mix.
+--   * Leakage for this sale is UNDERSTATED: discounts are measured from the
+--     (already reduced) list price, so the hidden markdown never appears
+--     as a discount.
+--   * Caveat: part of the gap could reflect price changes over time;
+--     likely small as the sale falls in all three Januaries.
