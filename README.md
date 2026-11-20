@@ -9,11 +9,7 @@
 
 ## The question
 
-<!-- ✏️ Rewrite in your own words: why you picked this question and what you wanted to find out. -->
-
-How much of a fashion retailer's potential revenue never turns into revenue, where does it go, and are the promotions that cause it worth what they cost?
-
-I framed the analysis around **revenue leakage** (discounts and returns) and **promotional impact**, the kind of questions a revenue-management or commercial analytics team works on.
+This project analyzes a fashion retailer’s sales to see how much potential revenue is lost to discounts and returns, and where the leakage is happening. Ultimately, it asks whether the promotions are worth their cost. The goal was to practise a revenue-management style of analysis.
 
 ---
 
