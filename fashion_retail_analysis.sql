@@ -583,7 +583,8 @@ SELECT
   campaign_name,
   COUNT(DISTINCT sale_date)                                        AS days,
   ROUND((SUM(net_usd) - SUM(cost_usd)) / 1000000, 1)               AS gross_profit,
-  ROUND((SUM(net_usd) - SUM(cost_usd)) / COUNT(DISTINCT sale_date) / 1000, 0) AS profit_per_day_k
+  ROUND((SUM(net_usd) - SUM(cost_usd)) / COUNT(DISTINCT sale_date) / 1000, 0) AS profit_per_day_k,
+  ROUND(SUM(quantity) / COUNT(DISTINCT sale_date))                 AS units_per_day   -- added later
 FROM fashion_retail.v_sales_promo
 WHERE transaction_type = 'Sale'
 GROUP BY campaign_name
@@ -605,6 +606,15 @@ ORDER BY profit_per_day_k DESC;
 --   * Black Friday at 60% earns LESS than half a normal day — the ~15%
 --     margin shows up in totals; volume doesn't compensate.
 --     -> Recommendation: test Black Friday at 50%.
+--   * Units per day (added later): normal 6,033 | Black Friday 19,149
+--     (~3.2x) | Holiday 41,211 (~6.8x) | New Year 4,497 (lowest).
+--     Profit per unit: normal ~$33.80 | Holiday ~$9.70 | Black Friday ~$4.20.
+--     -> Black Friday draws shoppers but earns little per unit; the
+--        shallower Holiday sale sells MORE units/day (seasonality caveat).
+--     -> Test target: at ~$9.70/unit, Black Friday at 50% needs only
+--        ~8,300 units/day (-57%) to match current profit.
+--     -> New Year sale's low volume supports the volume explanation
+--        (post-holiday fatigue or low leftover stock).
 --   * Store-wide rows (Holiday, Black Friday) cover the whole store, so
 --     they compare fairly to a normal day. Targeted rows cover only a few
 --     sub-categories -> NOT comparable to a whole-store day (see next step).
