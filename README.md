@@ -99,6 +99,7 @@ The Holiday Season Sale (12 days, \~$4.8M profit per year) is the strongest prom
 - **November is lower than October** because October has a 10-day campaign and November has only one promotion day. I chose this simpler explanation over customers "waiting" for Black Friday.
 - **Profit per day is only compared like-for-like:** store-wide sales against normal days, targeted campaigns against each other.
 - **Measured, not estimated:** I first estimated Black Friday's margin at ≈ 15% from its discount rate, then measured it at 19.5%. Store-wide items cost less relative to list price than the business average. Measuring margin for every campaign is also what revealed the New Year sale's hidden markdown.
+- - **Exchange rates (USD per unit, fixed for the whole period):** EUR 1.08, GBP 1.27, CNY 0.14. These are approximate; percentages within each country aren't affected by the rate choice.
 
 ---
 
