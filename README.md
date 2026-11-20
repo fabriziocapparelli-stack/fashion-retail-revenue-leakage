@@ -46,18 +46,24 @@ This project analyzes a fashion retailer’s sales to see how much potential rev
 - Every campaign in the data explains every discount: all campaign sales are discounted, and no sale outside a campaign is.
 
 ### 4. Black Friday underperforms
-| | Profit per day | Margin |
-|---|---|---|
-| Holiday Season Sale (50% off) | ~$401K | |
-| Normal day (full price) | ~$204K | 65.8% |
-| Black Friday (60% off) | ~$81K | |
-| Store-wide sales overall | | 35.1% |
+| | Profit per day | Units per day | Profit per unit | Margin |
+|---|---|---|---|---|
+| Holiday Season Sale (50% off) | ≈ $401K | 41,211 | ≈ $10 | 35.6% |
+| Normal day (full price) | ≈ $204K | 6,033 | ≈ $34 | 65.8% |
+| Black Friday (60% off) | ≈ $81K | 19,149 | ≈ $4 | 19.5% |
 
-- Production cost is ~34% of list price, so 60% off leaves only ~15% margin, and the extra volume doesn't make up for it.
+- Black Friday draws ≈ 3× a normal day's units, so demand isn't the problem: at 60% off, each sale earns only ≈ $4.
+- The Holiday Season Sale sells more units per day at a shallower discount, though peak holiday demand helps it.
 
 ![Promotions](screenshots/promotions.png)
 
-### 5. Other patterns
+### 5. The New Year sale hides a deeper discount
+- The New Year Winter Sale is the weakest campaign (≈ $27K profit per day), with the lowest volume of any campaign (4,497 units/day).
+- Its margin is only **23.8%** at an advertised 40% off. Every other campaign lands close to the margin its discount implies.
+- The same products carry **≈ 16% lower list prices** during the sale (2,070 products compared), so the advertised 40% works out to **≈ 50% off normal prices**.
+- That markdown is built into the list price, so it never appears as a discount in the data. **Leakage for this sale is understated.**
+
+### 6. Other patterns
 - **December dominates** (~$23–26M net revenue vs. ~$6–16M other months).
 - **Summer (June–August) is the slowest period and has no promotions at all.**
 - **2024 net revenue grew ~13%** over 2023, with every month up year over year.
@@ -92,6 +98,7 @@ The Holiday Season Sale (12 days, \~$4.8M profit per year) is the strongest prom
 - **The holiday sale's value can't be judged from this data alone.** Every holiday season in the data has a sale, so there's no comparison without one.
 - **November is lower than October** because October has a 10-day campaign and November has only one promotion day. I chose this simpler explanation over customers "waiting" for Black Friday.
 - **Profit per day is only compared like-for-like:** store-wide sales against normal days, targeted campaigns against each other.
+- **Measured, not estimated:** I first estimated Black Friday's margin at ≈ 15% from its discount rate, then measured it at 19.5%. Store-wide items cost less relative to list price than the business average. Measuring margin for every campaign is also what revealed the New Year sale's hidden markdown.
 
 ---
 
@@ -103,11 +110,13 @@ The Holiday Season Sale (12 days, \~$4.8M profit per year) is the strongest prom
   - campaign volume lifts reach up to 11× normal
   - production cost is a near-constant 32–35% of list price
   - Black Friday falls on Nov 27 in both years
+  
 
   The **methods** carry over to real data; the **magnitudes** shouldn't be taken as real-world evidence.
 - **The Black Friday finding rests on only two days.**
 - **No inventory data**, so stock levels can't be tested as an explanation.
 - **No supplier-funded discounts or basket data**, both of which can change margin in real retail.
+- **Price comparisons over time:** part of the New Year price gap could reflect price changes across the two years, though the sale falls in all three Januaries, so the effect should be small.
 
 ---
 
@@ -116,7 +125,7 @@ The Holiday Season Sale (12 days, \~$4.8M profit per year) is the strongest prom
 - **Do targeted campaigns pay off?** Targeted sales keep less margin than full price (48% vs. 66%), so they need enough extra volume. The simulated lifts are too large to answer this reliably; a controlled store-level test would.
 - **Is uneven targeting a missed opportunity or protected margin?** For example, testing a campaign on Feminine Pants & Jeans in some stores.
 - **Would a summer sale fill the June–August gap?**
-- **Why is the New Year Winter Sale so weak** (~$27K/day vs. $99–158K for other targeted campaigns)? Thinner margins are ruled out (cost is 33.6–35.1% of list, like everything else). That leaves post-holiday fatigue or low leftover winter stock, which would need inventory data.
+- **Why are New Year list prices lower?** It could be a planned end-of-season markdown or a pricing error. Either way, should the hidden markdown be reported as part of the campaign's cost?
 
 ---
 
