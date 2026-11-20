@@ -67,15 +67,14 @@ This project analyzes a fashion retailer’s sales to see how much potential rev
 
 ## Recommendation
 
-<!-- ✏️ Rewrite in your own words. -->
+**Test Black Friday at 50% and measure profit per day and units sold.**
 
-**Test Black Friday at 50% off and measure profit per day and volume.**
+Black Friday already draws \~3x a normal day’s units, but at 60% off it earns only \~$4 per unit, compared with \~$34 at full price. At 50% (~$10 per unit, as in the Holiday Season Sale), it would need only \~8,300 units/day (down from \~19,000) to match its current profit.
 
-- It's **low-stakes**: one day a year, ~$80K profit, easy to reverse.
-- Each sale would earn ~2.7× the profit (≈ $16 vs. $6 per $100 of list value), so volume could fall by more than half and still break even.
-- How shoppers respond to a shallower discount would show whether testing the much larger **Holiday Season Sale** (12 days, ~$9.6M profit) is worthwhile.
+- It's **low-stakes**: one day a year, \~$80K profit, easy to reverse.
+- Test stores should have enough stock to avoid sell-outs, and any sell-outs should be tracked, so results reflect shoppers’ response to price rather than availability.
 
-I would **keep** the holiday sale. Holiday shoppers are likely to buy elsewhere without it, so its cost can't be judged without a counterfactual.
+The Holiday Season Sale (12 days, \~$4.8M profit per year) is the strongest promotion, so I wouldn’t change it outright. If the Black Friday test shows shoppers barely react to a shallower discount, a limited pilot (a few stores, a small step such as 45%) would show whether it’s giving away more than it needs to, without risking the whole season.
 
 ---
 
