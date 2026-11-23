@@ -1,7 +1,7 @@
 # Revenue Leakage & Promotional Impact Analysis — Global Fashion Retail
 
 **Tools:** Google BigQuery (SQL) · Google Cloud Storage · Looker Studio
-**Dashboard:** [View the Looker Studio dashboard](https://datastudio.google.com/u/0/reporting/99440ef9-1517-42f2-93a5-8ba2a9e31bc0/page/eqhDG)
+**Dashboard:** [View the Looker Studio dashboard](https://datastudio.google.com/reporting/99440ef9-1517-42f2-93a5-8ba2a9e31bc0)
 
 ![Overview page](screenshots/overview.png)
 
