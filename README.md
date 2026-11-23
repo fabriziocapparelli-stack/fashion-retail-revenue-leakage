@@ -86,8 +86,6 @@ The Holiday Season Sale (12 days, \~$4.8M profit per year) is the strongest prom
 
 ## Decisions & assumptions
 
-<!-- ✏️ These reflect your reasoning during the project. Rewrite each one in your own words. -->
-
 - **Why gross sales are calculated:** the data only has the amount paid and a discount *rate*. Measuring leakage needs the list-price value as a baseline.
 - **Returns are measured at the refunded amount**, not list price. Refunds are paid at the discounted price, so the discount on a returned item is reversed rather than double-counted.
 - **Return rows are sign-adjusted** (positive quantity, negative amount in the raw data) so they subtract correctly from every total.
@@ -154,7 +152,12 @@ The Holiday Season Sale (12 days, \~$4.8M profit per year) is the strongest prom
 
 ## About this project
 
-<!-- ✏️ Write this yourself. Suggested points: why you built it, that you used AI assistance for parts of the SQL, how you validated and interpreted the results, and which queries you wrote yourself. -->
+I built this project to develop hands-on skills for roles where data informs business decisions: data validation and preparation, SQL in BigQuery, and dashboarding in Looker Studio. Beyond the technical side, I wanted to demonstrate critical thinking by turning the analysis into a recommendation the business could act on.
+
+- **Use of AI:** I used AI to help write the more complex SQL queries, set up BigQuery, Looker Studio and GitHub, and give feedback on my analysis and writing. I ran and verified every query myself, and designed and built the dashboard.
+- **Queries I wrote:** I wrote 8 of the 22 queries in the SQL file (marked in the file), with guidance on syntax.
+- **Checking my own work:** Measuring each campaign's margin, rather than relying on my estimate, revealed the New Year sale's hidden markdown.
+- **Next steps:** I'd like to build more of the advanced SQL myself, particularly window functions and range joins.
 
 ---
 
